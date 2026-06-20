@@ -1,12 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageHeader, RiskBadge } from "@/components/layout/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { alerts, txVolume24h, fraudScoreHist, kpis } from "@/lib/mockData";
+import { loadAlerts, loadFraudScoreHist, loadKpis, loadTxVolume24h } from "@/lib/api/data";
 import { LineChart, Line, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Area, AreaChart } from "recharts";
 import { ArrowDownRight, ArrowUpRight, Activity, ShieldCheck, Zap, Bot } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [{ title: "Overview — Sentinel Risk Ops" }, { name: "description", content: "Real-time fraud and credit risk operations dashboard." }] }),
+  loader: async () => ({
+    alerts: await loadAlerts(),
+    kpis: await loadKpis(),
+    txVolume24h: await loadTxVolume24h(),
+    fraudScoreHist: await loadFraudScoreHist(),
+  }),
   component: Overview,
 });
 
@@ -34,6 +40,7 @@ function KPI({ icon: Icon, label, value, delta, deltaUp, hint }: { icon: any; la
 }
 
 function Overview() {
+  const { alerts, kpis, txVolume24h, fraudScoreHist } = Route.useLoaderData();
   const recent = [...alerts].sort((a, b) => +new Date(b.timestamp) - +new Date(a.timestamp)).slice(0, 12);
   return (
     <AppShell>

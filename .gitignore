@@ -18,3 +18,14 @@ backend/.venv/
 .ruff_cache/
 .mypy_cache/
 .uv/
+
+# Model training outputs
+model_training/models/*.joblib
+model_training/models/*.png
+model_training/models/*.json
+model_training/models/*.csv
+
+# Large raw datasets (keep README + small samples)
+model_training/data/archive*/
+model_training/data/*.csv
+!model_training/data/README.md

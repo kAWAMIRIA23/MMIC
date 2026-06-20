@@ -1,20 +1,21 @@
 import { createFileRoute, Link, useParams, notFound } from "@tanstack/react-router";
 import { AppShell, PageHeader, RiskBadge } from "@/components/layout/AppShell";
-import { alerts, graphNodes, graphEdges } from "@/lib/mockData";
+import { graphNodes, graphEdges } from "@/lib/mockData";
+import { loadAlert } from "@/lib/api/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, AlertOctagon, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/alerts/$id")({
   head: () => ({ meta: [{ title: "Alert Detail — Sentinel" }] }),
+  loader: ({ params }) => loadAlert(params.id),
   component: AlertDetail,
   errorComponent: ({ error }) => <div className="p-8 text-sm">Error: {error.message}</div>,
   notFoundComponent: () => <div className="p-8 text-sm">Alert not found.</div>,
 });
 
 function AlertDetail() {
-  const { id } = useParams({ from: "/alerts/$id" });
-  const alert = alerts.find((a) => a.id === id);
+  const alert = Route.useLoaderData();
   if (!alert) throw notFound();
 
   const relatedNodes = graphNodes.slice(0, 7);

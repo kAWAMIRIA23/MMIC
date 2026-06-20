@@ -1,15 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
-import { agentLog } from "@/lib/mockData";
+import { loadAgentLog } from "@/lib/api/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/agent-log")({
   head: () => ({ meta: [{ title: "Agent Activity Log — Sentinel" }] }),
+  loader: () => loadAgentLog(),
   component: AgentLogPage,
 });
 
 function AgentLogPage() {
+  const agentLog = Route.useLoaderData();
   const [filter, setFilter] = useState<string>("all");
   const filtered = agentLog.filter((e) => filter === "all" || e.action === filter);
 

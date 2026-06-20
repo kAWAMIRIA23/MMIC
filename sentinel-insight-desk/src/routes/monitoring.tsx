@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
-import { monitoring } from "@/lib/mockData";
+import { loadMonitoring } from "@/lib/api/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, Legend } from "recharts";
 import { AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/monitoring")({
   head: () => ({ meta: [{ title: "Model Monitoring — Sentinel" }] }),
+  loader: () => loadMonitoring(),
   component: MonitoringPage,
 });
 
@@ -15,6 +16,7 @@ const grid = "hsl(215 20% 25%)";
 const tooltip = { contentStyle: { background: "hsl(220 25% 14%)", border: "1px solid hsl(215 20% 25%)", borderRadius: 6, fontSize: 12 } };
 
 function MonitoringPage() {
+  const monitoring = Route.useLoaderData();
   const psiBreach = monitoring.some(m => m.psiCredit > 0.25);
   return (
     <AppShell>

@@ -1,15 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { AppShell, PageHeader, RiskBadge } from "@/components/layout/AppShell";
-import { alerts } from "@/lib/mockData";
+import { loadAlerts } from "@/lib/api/data";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const Route = createFileRoute("/alerts/")({
   head: () => ({ meta: [{ title: "Alert Queue — Sentinel" }] }),
+  loader: () => loadAlerts(),
   component: AlertQueue,
 });
 
 function AlertQueue() {
+  const alerts = Route.useLoaderData();
   const [tier, setTier] = useState<string>("all");
   const [status, setStatus] = useState<string>("all");
   const [q, setQ] = useState("");

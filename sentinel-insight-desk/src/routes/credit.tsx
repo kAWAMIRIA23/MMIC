@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, PageHeader } from "@/components/layout/AppShell";
-import { creditApplications, type CreditApplication } from "@/lib/mockData";
+import { loadCreditApplications } from "@/lib/api/data";
+import type { CreditApplication } from "@/lib/mockData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
 export const Route = createFileRoute("/credit")({
   head: () => ({ meta: [{ title: "Credit Scoring — Sentinel" }] }),
+  loader: () => loadCreditApplications(),
   component: CreditPage,
 });
 
@@ -22,8 +24,11 @@ function gradeColor(g: string) {
 }
 
 function CreditPage() {
+  const creditApplications = Route.useLoaderData();
   const [selected, setSelected] = useState<CreditApplication | null>(null);
-  const approvalRate = (creditApplications.filter(a => a.decision === "approved").length / creditApplications.length * 100).toFixed(1);
+  const approvalRate = creditApplications.length
+    ? (creditApplications.filter(a => a.decision === "approved").length / creditApplications.length * 100).toFixed(1)
+    : "0.0";
 
   return (
     <AppShell>

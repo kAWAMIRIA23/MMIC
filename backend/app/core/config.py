@@ -1,8 +1,12 @@
 from functools import lru_cache
 from typing import Annotated, Literal
 
+from pathlib import Path
+
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 class Settings(BaseSettings):
@@ -27,6 +31,8 @@ class Settings(BaseSettings):
     ]
     database_url: str = ""
     log_level: str = "INFO"
+    models_dir: Path = REPO_ROOT / "model_training" / "models"
+    data_dir: Path = REPO_ROOT / "model_training" / "data"
 
     @field_validator("cors_origins", mode="before")
     @classmethod
