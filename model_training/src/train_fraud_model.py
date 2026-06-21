@@ -351,11 +351,11 @@ def main(data_path: str, target_col: str = "is_fraud"):
         },
     }
     joblib.dump(artifact, MODELS_DIR / "fraud_model.joblib")
-    print(f"\n✓ Model artifact saved to {MODELS_DIR / 'fraud_model.joblib'}")
+    print(f"\n[OK] Model artifact saved to {MODELS_DIR / 'fraud_model.joblib'}")
 
     with open(MODELS_DIR / "training_report.json", "w") as f:
         json.dump(artifact["metadata"], f, indent=2)
-    print(f"✓ Training report saved to {MODELS_DIR / 'training_report.json'}")
+    print(f"[OK] Training report saved to {MODELS_DIR / 'training_report.json'}")
 
     print("\n" + "=" * 70)
     print("DONE. Load this artifact in FastAPI with:")

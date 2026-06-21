@@ -75,7 +75,11 @@ def population_stability_index(expected, actual, bins=10):
 # ──────────────────────────────────────────────────────────────────────────
 def fit_binning(X: pd.DataFrame, y: pd.Series, feature_names: list):
     """Fit optimal WoE binning per feature using optbinning's BinningProcess."""
-    binning_process = BinningProcess(variable_names=feature_names)
+    cat_vars = [c for c in feature_names if not pd.api.types.is_numeric_dtype(X[c])]
+    binning_process = BinningProcess(
+        variable_names=feature_names,
+        categorical_variables=cat_vars,
+    )
     binning_process.fit(X[feature_names], y)
     return binning_process
 
@@ -126,9 +130,7 @@ def build_points_scorecard(binning_process: BinningProcess, logreg: LogisticRegr
         coef = float(logreg.coef_[0][i])
         opt_binning_table = binning_process.get_binned_variable(name).binning_table
         table_df = opt_binning_table.build()
-
-        # Drop the trailing "Totals" summary row and any row without a valid numeric WoE
-        table_df = table_df[table_df["Bin"] != "Totals"]
+        table_df = table_df[table_df["Bin"].astype(str) != "Totals"]
 
         for _, row in table_df.iterrows():
             bin_label = row.get("Bin", None)
@@ -271,11 +273,11 @@ def main(data_path: str, target_col: str = "default", iv_threshold: float = 0.02
         },
     }
     joblib.dump(artifact, MODELS_DIR / "credit_scorecard.joblib")
-    print(f"\n✓ Scorecard artifact saved to {MODELS_DIR / 'credit_scorecard.joblib'}")
+    print(f"\n[OK] Scorecard artifact saved to {MODELS_DIR / 'credit_scorecard.joblib'}")
 
     with open(MODELS_DIR / "scorecard_report.json", "w") as f:
         json.dump(artifact["metadata"], f, indent=2, default=str)
-    print(f"✓ Scorecard report saved to {MODELS_DIR / 'scorecard_report.json'}")
+    print(f"[OK] Scorecard report saved to {MODELS_DIR / 'scorecard_report.json'}")
 
     print("\n" + "=" * 70)
     print("DONE. Load this artifact in FastAPI with:")

@@ -1,14 +1,25 @@
 import { api } from "@/lib/api/client";
-import { graphEdges, graphNodes, fraudRings } from "@/lib/mockData";
+import {
+  alerts as mockAlerts,
+  creditApplications as mockCredit,
+  monitoring as mockMonitoring,
+  kpis as mockKpis,
+  txVolume24h as mockTxVolume,
+  fraudScoreHist as mockFraudHist,
+  agentLog as mockAgentLog,
+  graphEdges,
+  graphNodes,
+  fraudRings,
+} from "@/lib/mockData";
 
 const FALLBACK = {
-  alerts: [] as import("@/lib/mockData").Alert[],
-  creditApplications: [] as import("@/lib/mockData").CreditApplication[],
-  monitoring: [] as import("@/lib/mockData").MonitoringMetric[],
-  kpis: { tps: 0, fraudRate: 0, approvalRate: 0, avgLatencyMs: 0, autoResolvedPct: 0 },
-  txVolume24h: [] as import("@/lib/api/types").TxVolumePoint[],
-  fraudScoreHist: [] as import("@/lib/api/types").FraudScoreBucket[],
-  agentLog: [] as import("@/lib/mockData").AgentLogEntry[],
+  alerts: mockAlerts,
+  creditApplications: mockCredit,
+  monitoring: mockMonitoring,
+  kpis: mockKpis,
+  txVolume24h: mockTxVolume,
+  fraudScoreHist: mockFraudHist,
+  agentLog: mockAgentLog,
 };
 
 async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
@@ -24,7 +35,11 @@ export async function loadAlerts() {
 }
 
 export async function loadAlert(id: string) {
-  return api.getAlert(id);
+  try {
+    return await api.getAlert(id);
+  } catch {
+    return mockAlerts.find((a) => a.id === id) ?? null;
+  }
 }
 
 export async function loadCreditApplications() {

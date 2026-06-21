@@ -38,12 +38,13 @@ def get_alerts() -> list[Alert]:
 
     df = pd.read_csv(TRANSACTIONS_CSV)
     df["timestamp"] = pd.to_datetime(df["timestamp"])
-    sample = df.sort_values("timestamp", ascending=False).head(80).copy()
-    scored = score_transactions(sample)
+    sample = df.sort_values("timestamp", ascending=False).head(80).reset_index(drop=True)
+    scored = score_transactions(sample).reset_index(drop=True)
 
     alerts: list[Alert] = []
-    for i, (idx, row) in enumerate(sample.iterrows()):
-        s = scored.loc[idx]
+    for i in range(len(sample)):
+        row = sample.iloc[i]
+        s = scored.iloc[i]
         alerts.append(
             Alert(
                 id=f"ALT-{int(row['transaction_id']):06d}" if str(row["transaction_id"]).isdigit() else f"ALT-{i:06d}",
@@ -88,12 +89,13 @@ def get_credit_applications() -> list[CreditApplication]:
         _credit_cache = []
         return _credit_cache
 
-    df = pd.read_csv(APPLICATIONS_CSV).head(40)
-    scored = score_applications(df)
+    df = pd.read_csv(APPLICATIONS_CSV).head(40).reset_index(drop=True)
+    scored = score_applications(df).reset_index(drop=True)
 
     apps: list[CreditApplication] = []
-    for i, (idx, row) in enumerate(df.iterrows()):
-        s = scored.loc[idx]
+    for i in range(len(df)):
+        row = df.iloc[i]
+        s = scored.iloc[i]
         apps.append(
             CreditApplication(
                 id=f"APP-{70000 + i:06d}",
