@@ -61,7 +61,7 @@ function CreditPage() {
                   </thead>
                   <tbody className="divide-y divide-border">
                     {creditApplications.map((a) => (
-                      <tr key={a.id} onClick={()=>setSelected(a)} className={`cursor-pointer hover:bg-secondary/40 ${selected?.id===a.id ? "bg-secondary/40" : ""}`}>
+                      <tr key={a.id} onClick={()=>setSelected(a)} className={`hover:bg-secondary/40 ${selected?.id===a.id ? "bg-secondary/40" : ""}`}>
                         <td className="px-3 py-2 font-mono" style={{color:"#2DD4BF"}}>{a.id}</td>
                         <td className="px-3 py-2 font-mono">{a.applicantId}</td>
                         <td className="px-3 py-2 text-right tabular-nums">${a.requestedAmount.toLocaleString()}</td>

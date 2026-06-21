@@ -34,7 +34,7 @@ function GraphPage() {
           <div className="space-y-1">
             <div className="mb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Entity types</div>
             {(Object.keys(filters) as (keyof typeof filters)[]).map((k) => (
-              <label key={k} className="flex cursor-pointer items-center gap-2 capitalize">
+              <label key={k} className="flex items-center gap-2 capitalize">
                 <input type="checkbox" checked={filters[k]} onChange={(e)=>setFilters({...filters,[k]:e.target.checked})} />
                 <span className="h-2.5 w-2.5 rounded-sm" style={{background:COLORS[k]}} />
                 {k}
@@ -65,10 +65,10 @@ function GraphPage() {
               if (!s?.x || !t?.x) return null;
               return <line key={i} x1={s.x} y1={s.y} x2={t.x} y2={t.y} stroke="hsl(215 20% 28%)" strokeWidth={1} />;
             })}
-            {visible.map((n) => {
+                {visible.map((n) => {
               const isSel = selected?.id === n.id;
               return (
-                <g key={n.id} className="cursor-pointer" onClick={() => setSelected(n)}>
+                <g key={n.id} onClick={() => setSelected(n)}>
                   <circle cx={n.x} cy={n.y} r={6 + n.riskScore * 14} fill={COLORS[n.type]} fillOpacity={0.85} stroke={isSel ? "#fff" : "hsl(215 20% 40%)"} strokeWidth={isSel ? 2 : 1} />
                   {(n.riskScore > 0.7 || isSel) && (
                     <text x={n.x} y={(n.y ?? 0) + 26} textAnchor="middle" fontSize="9" fill="hsl(215 16% 75%)">{n.label}</text>

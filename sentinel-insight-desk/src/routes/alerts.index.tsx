@@ -74,10 +74,10 @@ function AlertQueue() {
                 <thead className="border-b border-border bg-secondary/30 text-left text-[11px] uppercase tracking-wider text-muted-foreground">
                   <tr>
                     <th className="px-3 py-2.5">Alert</th>
-                    <th className="cursor-pointer px-3 py-2.5" onClick={() => toggleSort("timestamp")}>Time</th>
+                    <th className="px-3 py-2.5" onClick={() => toggleSort("timestamp")}>Time</th>
                     <th className="px-3 py-2.5">Account</th>
-                    <th className="cursor-pointer px-3 py-2.5 text-right" onClick={() => toggleSort("amount")}>Amount</th>
-                    <th className="cursor-pointer px-3 py-2.5 text-right" onClick={() => toggleSort("fraudScore")}>Fraud</th>
+                    <th className="px-3 py-2.5 text-right" onClick={() => toggleSort("amount")}>Amount</th>
+                    <th className="px-3 py-2.5 text-right" onClick={() => toggleSort("fraudScore")}>Fraud</th>
                     <th className="px-3 py-2.5 text-right">Credit</th>
                     <th className="px-3 py-2.5">AI Recommendation</th>
                     <th className="px-3 py-2.5 text-right">Conf.</th>
